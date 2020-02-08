@@ -1,12 +1,7 @@
-// Packages
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const express = require('express');
 const app = express();
-
-// Models
-
-
 
 // Routes
 const indexRoutes = require('./routes/index');
