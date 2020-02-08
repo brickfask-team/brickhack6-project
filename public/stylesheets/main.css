@@ -1,6 +1,8 @@
 :root {
+  --bkgd-color: #cd6133;
   --light-color: #fff;
 }
 body {
   font-family: Helvetica, non-serif;
+  background-color: var(--bkgd-color);
 }
