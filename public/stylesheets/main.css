@@ -4,3 +4,10 @@
 body {
   font-family: Helvetica, non-serif;
 }
+h1 {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
