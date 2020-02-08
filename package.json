@@ -1,0 +1,19 @@
+{
+  "name": "brickhack6-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brickfask-team/brickhack6-project.git"
+  },
+  "author": "fask",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brickfask-team/brickhack6-project/issues"
+  },
+  "homepage": "https://github.com/brickfask-team/brickhack6-project#readme"
+}
