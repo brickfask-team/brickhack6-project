@@ -9,7 +9,8 @@ const app = express();
 
 
 // Routes
-
+const indexRoutes = require('./routes/index');
+app.use(indexRoutes);
 
 // App Setup
 app.set('view engine', 'ejs');
