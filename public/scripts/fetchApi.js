@@ -7,17 +7,25 @@ let beerUrl = `https://api.wegmans.io/products/categories/6941-2521` +
   `?api-version=2018-10-18&subscription-key=${primaryApiKey}`;
 let storeUrl = `https://api.wegmans.io/stores?Subscription-Key=${primaryApiKey}&api-version=2018-10-18`;
 
-const user_location = document.getElementById('user_loc');
-const btn = document.getElementById('btn');
-const input = document.querySelector('[type="text"]');
-let inputValue = '';
+let user_location = document.getElementById('user_loc');
+let btn = document.getElementById('search-btn');
+let input = document.querySelector('[type="text"]');
 
 btn.addEventListener('click', () => {
   query = input.value;
+  console.log(query);
   searchUrl = `https://api.wegmans.io/products/search?query=${query}&api-version=2018-10-18&subscription-key=${secondaryApiKey}`; 
   getSearchResults();
-  getStores();
+  // getStores();
   // getAvailability();
+});
+
+// document.getElementById('search-results').value = document.location.search.substring(8);
+document.querySelectorAll('.list-group-item').forEach(item => {
+    item.addEventListener('click', () => {
+        let id = item.querySelector('.store').value;
+        console.log(id);
+    });
 });
 
 function getLocation() {
@@ -79,15 +87,57 @@ function getSearchResults() {
   fetch(searchUrl)
     .then(res => res.json())
     .then(data => {
-      console.log(searchUrl);
-      console.log(query);
       let results = data["results"];
+      let listGroup = document.querySelector('#list-group');
+      listGroup.innerHTML = '';
       for (let i = 0; i < results.length; i++) {
-        addListElement(results[i].name);
+        addProduct(results[i]);
       }
     });
 }
 
+function addProduct(product) {
+  let listGroup = document.querySelector('#list-group');
+  let link_card = document.createElement('a');
+  let link_card_href = document.createAttribute('href');
+  let link_card_class = document.createAttribute('class');
+  link_card_href.value = '#';
+  link_card_class.value = 'list-group-item list-group-item-action active';
+  link_card.setAttributeNode(link_card_href);
+  link_card.setAttributeNode(link_card_class);
+  let card = document.createElement('div');
+  let card_class = document.createAttribute('class');
+  card_class.value = 'd-flex w-100 justify-content-between';
+  card.setAttributeNode(card_class);
+  let name = document.createElement('h5');
+  let name_class = document.createAttribute('class');
+  name_class.value = 'mb-1';
+  name.setAttributeNode(name_class);
+  let address = document.createElement('p');
+  let address_class = document.createAttribute('class');
+  address_class.value = 'mb-1';
+  address.setAttributeNode(address_class);
+  let price = document.createElement('strong');
+  let distance = document.createElement('small');
+  name.appendChild(document.createTextNode(product.name));
+  price.appendChild(document.createTextNode('$14'));
+  card.appendChild(name);
+  card.appendChild(price);
+  address.appendChild(document.createTextNode('650 Hylan Drive, Rochester NY, 14623'));
+  distance.appendChild(document.createTextNode('3 miles'));
+  link_card.appendChild(card);
+  link_card.appendChild(address);
+  link_card.appendChild(distance);
+  listGroup.appendChild(link_card);
+}
+
+function addListElement(product) {
+  let ul = document.getElementsByTagName('ul');
+  ul.innerHTML = '';
+  let li = document.createElement('li');
+  li.appendChild(document.createTextNode(product));
+  ul[0].appendChild(li);
+}
 function compareStock() {
   for (let i = 0; i < 90; i++) {
     fetch(`https://api.wegmans.io/products/${results[i].sku}/availabilities?api-version=2018-10-18&Subscription-Key=${primaryApiKey}`, {
@@ -114,11 +164,16 @@ function compareStock() {
   }
 }
 
-function addListElement(product) {
-  let ul = document.getElementsByTagName('ul');
-  ul.innerHTML = '';
-  let li = document.createElement('li');
-  li.appendChild(document.createTextNode(product));
-  ul[0].appendChild(li);
-}
 
+const auto_comp = new autoComplete({
+    selector: '#search-home',
+    minChars: 0,
+    source: function(term, suggest){
+        term = term.toLowerCase();
+        let choices = ['Corona', 'Modelo', 'Heineken'];
+        let matches = [];
+        for (let i = 0; i < choices.length; i++)
+            if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+        suggest(matches);
+    }
+});
